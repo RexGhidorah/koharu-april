@@ -13,6 +13,10 @@
     "exportPsd": "Exportar PSD...",
     "exportAllInpainted": "Exportar todo lo rellenado...",
     "exportAllRendered": "Exportar todo lo renderizado...",
+    "exportSelectedInpainted": "Exportar seleccionados rellenados...",
+    "exportSelectedRendered": "Exportar seleccionados renderizados...",
+    "processSelected": "Procesar imágenes seleccionadas",
+    "deleteSelected": "Eliminar imágenes seleccionadas",
     "view": "Ver",
     "fitWindow": "Ajustar a la ventana",
     "originalSize": "Tamaño original",
@@ -57,7 +61,11 @@
     "pages_one": "{{count}} página",
     "pages_other": "{{count}} páginas",
     "empty": "No hay documentos",
-    "prompt": "Selecciona o importa una página para comenzar"
+    "prompt": "Selecciona o importa una página para comenzar",
+    "selected_one": "{{count}} seleccionado",
+    "selected_other": "{{count}} seleccionados",
+    "selectAll": "Seleccionar todo",
+    "deselectAll": "Deseleccionar todo"
   },
   "panels": {
     "processing": "Procesamiento",

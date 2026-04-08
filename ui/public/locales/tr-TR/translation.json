@@ -13,6 +13,10 @@
     "exportPsd": "PSD Olarak Dışa Aktar...",
     "exportAllInpainted": "Tüm İnpaint Görsellerini Dışa Aktar...",
     "exportAllRendered": "Tüm Render Görsellerini Dışa Aktar...",
+    "exportSelectedInpainted": "Seçili İnpaint Görsellerini Dışa Aktar...",
+    "exportSelectedRendered": "Seçili Render Görsellerini Dışa Aktar...",
+    "processSelected": "Seçili görselleri işle",
+    "deleteSelected": "Seçili görselleri sil",
     "view": "Görünüm",
     "fitWindow": "Pencereye Sığdır",
     "originalSize": "Özgün Boyut",
@@ -57,7 +61,11 @@
     "pages_one": "{{count}} sayfa",
     "pages_other": "{{count}} sayfa",
     "empty": "Belge yok",
-    "prompt": "Başlamak için bir sayfa seçin veya içe aktarın"
+    "prompt": "Başlamak için bir sayfa seçin veya içe aktarın",
+    "selected_one": "{{count}} seçildi",
+    "selected_other": "{{count}} seçildi",
+    "selectAll": "Tümünü seç",
+    "deselectAll": "Seçimi kaldır"
   },
   "panels": {
     "processing": "İşleme",

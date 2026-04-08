@@ -13,6 +13,10 @@
     "exportPsd": "匯出 PSD...",
     "exportAllInpainted": "匯出所有修補後的影像...",
     "exportAllRendered": "匯出所有渲染後的影像...",
+    "exportSelectedInpainted": "匯出選取的修補後影像...",
+    "exportSelectedRendered": "匯出選取的渲染後影像...",
+    "processSelected": "處理選取的圖片",
+    "deleteSelected": "刪除選取的圖片",
     "view": "檢視",
     "fitWindow": "符合視窗",
     "originalSize": "原始大小",
@@ -57,7 +61,11 @@
     "pages_one": "{{count}} 頁",
     "pages_other": "{{count}} 頁",
     "empty": "沒有文件",
-    "prompt": "選擇或匯入頁面以開始"
+    "prompt": "選擇或匯入頁面以開始",
+    "selected_one": "已選取 {{count}} 項",
+    "selected_other": "已選取 {{count}} 項",
+    "selectAll": "全選",
+    "deselectAll": "取消全選"
   },
   "panels": {
     "processing": "處理",

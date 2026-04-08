@@ -40,7 +40,7 @@ impl ApiState {
 
 pub fn api() -> (axum::Router<ApiState>, utoipa::openapi::OpenApi) {
     OpenApiRouter::default()
-        .routes(routes!(list_documents, import_documents))
+        .routes(routes!(list_documents, import_documents, delete_documents))
         .routes(routes!(get_document))
         .routes(routes!(update_document_style))
         .routes(routes!(get_blob))
@@ -154,6 +154,13 @@ struct ExportQuery {
 #[serde(rename_all = "camelCase")]
 struct ExportBatchRequest {
     layer: Option<ExportLayer>,
+    document_ids: Option<Vec<String>>,
+}
+
+#[derive(Debug, Deserialize, utoipa::ToSchema)]
+#[serde(rename_all = "camelCase")]
+struct DeleteDocumentsRequest {
+    document_ids: Vec<String>,
 }
 
 // ---------------------------------------------------------------------------
@@ -417,6 +424,35 @@ async fn list_documents(State(state): State<ApiState>) -> ApiResult<Json<Vec<Doc
     let resources = state.resources()?;
     let documents = resources.storage.list_pages().await;
     Ok(Json(documents))
+}
+
+#[utoipa::path(
+    delete,
+    path = "/documents",
+    operation_id = "deleteDocuments",
+    tag = "documents",
+    request_body = DeleteDocumentsRequest,
+    responses(
+        (status = 204),
+        (status = 400, body = ApiError),
+        (status = 503, body = ApiError),
+    ),
+)]
+#[tracing::instrument(level = "info", skip_all)]
+async fn delete_documents(
+    State(state): State<ApiState>,
+    Json(request): Json<DeleteDocumentsRequest>,
+) -> ApiResult<StatusCode> {
+    if request.document_ids.is_empty() {
+        return Err(ApiError::bad_request("No document IDs provided"));
+    }
+    let resources = state.resources()?;
+    resources
+        .storage
+        .delete_pages(&request.document_ids)
+        .await
+        .map_err(ApiError::from)?;
+    Ok(StatusCode::NO_CONTENT)
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, utoipa::ToSchema)]
@@ -1171,6 +1207,7 @@ async fn start_pipeline(
         resources.clone(),
         koharu_core::ProcessRequest {
             document_id: request.document_id.clone(),
+            document_ids: request.document_ids.clone(),
             llm: request.llm.clone(),
             language: request.language,
             system_prompt: request.system_prompt,
@@ -1421,8 +1458,12 @@ async fn batch_export(
 ) -> ApiResult<Json<ExportResult>> {
     let resources = state.resources()?;
     let count = match request.layer.unwrap_or(ExportLayer::Rendered) {
-        ExportLayer::Rendered => io::export_all_rendered(resources).await?,
-        ExportLayer::Inpainted => io::export_all_inpainted(resources).await?,
+        ExportLayer::Rendered => {
+            io::export_all_rendered(resources, request.document_ids).await?
+        }
+        ExportLayer::Inpainted => {
+            io::export_all_inpainted(resources, request.document_ids).await?
+        }
     };
     Ok(Json(ExportResult { count }))
 }

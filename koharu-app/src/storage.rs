@@ -228,6 +228,13 @@ impl Storage {
         self.persist(&project)
     }
 
+    /// Delete pages by ID and auto-save the project.
+    pub async fn delete_pages(&self, ids: &[String]) -> Result<()> {
+        let mut project = self.project.write().await;
+        project.pages.retain(|p| !ids.contains(&p.id));
+        self.persist(&project)
+    }
+
     /// Replace a page entirely and auto-save the project.
     pub async fn save_page(&self, id: &str, page: Document) -> Result<()> {
         let mut project = self.project.write().await;

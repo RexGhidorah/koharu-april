@@ -52,6 +52,17 @@ type EditorUiState = {
   setRenderEffect: (effect: RenderEffect) => void
   setRenderStroke: (stroke?: RenderStroke) => void
 
+  // --- selection ---
+  selectedDocumentIds: Set<string>
+  selectionAnchorIndex: number | null
+  handleDocumentSelection: (
+    id: string,
+    index: number,
+    allDocuments: { id: string }[],
+    modifiers: { shiftKey: boolean; ctrlKey: boolean },
+  ) => void
+  clearDocumentSelection: () => void
+
   // --- llm ui ---
   selectedTarget?: LlmTarget
   selectedLanguage?: string
@@ -87,6 +98,10 @@ const initialState = {
   } as RenderEffect,
   renderStroke: undefined as RenderStroke | undefined,
 
+  // selection
+  selectedDocumentIds: new Set<string>(),
+  selectionAnchorIndex: null as number | null,
+
   // llm ui
   selectedTarget: undefined as LlmTarget | undefined,
   selectedLanguage: undefined as string | undefined,
@@ -107,6 +122,8 @@ export const useEditorUiStore = create<EditorUiState>((set, get) => ({
         documentsVersion: state.documentsVersion + 1,
         currentDocumentId: null,
         selectedBlockIndex: undefined,
+        selectedDocumentIds: new Set<string>(),
+        selectionAnchorIndex: null,
       }
     })
   },
@@ -115,6 +132,41 @@ export const useEditorUiStore = create<EditorUiState>((set, get) => ({
       currentDocumentId: id,
       selectedBlockIndex: undefined,
     })),
+
+  // --- selection actions ---
+  handleDocumentSelection: (id, index, allDocuments, { shiftKey, ctrlKey }) => {
+    set((state) => {
+      const nextSelected = new Set(state.selectedDocumentIds)
+      let nextAnchor = state.selectionAnchorIndex
+
+      if (shiftKey && nextAnchor !== null) {
+        if (!ctrlKey) nextSelected.clear()
+        const start = Math.min(nextAnchor, index)
+        const end = Math.max(nextAnchor, index)
+        for (let i = start; i <= end; i++) {
+          const docId = allDocuments[i]?.id
+          if (docId) nextSelected.add(docId)
+        }
+      } else if (ctrlKey) {
+        if (nextSelected.has(id)) nextSelected.delete(id)
+        else nextSelected.add(id)
+        nextAnchor = index
+      } else {
+        nextSelected.clear()
+        nextSelected.add(id)
+        nextAnchor = index
+      }
+
+      return {
+        currentDocumentId: id,
+        selectedDocumentIds: nextSelected,
+        selectionAnchorIndex: nextAnchor,
+        selectedBlockIndex: undefined,
+      }
+    })
+  },
+  clearDocumentSelection: () =>
+    set({ selectedDocumentIds: new Set<string>(), selectionAnchorIndex: null }),
   setScale: (scale) => {
     const clamped = Math.max(10, Math.min(100, Math.round(scale)))
     set({ scale: clamped })
@@ -189,5 +241,7 @@ export const useEditorUiStore = create<EditorUiState>((set, get) => ({
       totalPages: get().totalPages,
       documentsVersion: get().documentsVersion,
       currentDocumentId: get().currentDocumentId,
+      selectedDocumentIds: new Set<string>(),
+      selectionAnchorIndex: null,
     })),
 }))

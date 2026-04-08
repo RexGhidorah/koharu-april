@@ -13,6 +13,10 @@
     "exportPsd": "PSD 내보내기...",
     "exportAllInpainted": "모든 인페인트 이미지 내보내기...",
     "exportAllRendered": "모든 렌더링된 이미지 내보내기...",
+    "exportSelectedInpainted": "선택한 인페인트 이미지 내보내기...",
+    "exportSelectedRendered": "선택한 렌더링된 이미지 내보내기...",
+    "processSelected": "선택한 이미지 처리",
+    "deleteSelected": "선택한 이미지 삭제",
     "view": "보기",
     "fitWindow": "창에 맞추기",
     "originalSize": "원본 크기",
@@ -57,7 +61,11 @@
     "pages_one": "{{count}} 페이지",
     "pages_other": "{{count}} 페이지",
     "empty": "문서 없음",
-    "prompt": "시작하려면 페이지를 선택하거나 가져오세요"
+    "prompt": "시작하려면 페이지를 선택하거나 가져오세요",
+    "selected_one": "{{count}}개 선택됨",
+    "selected_other": "{{count}}개 선택됨",
+    "selectAll": "모두 선택",
+    "deselectAll": "선택 해제"
   },
   "panels": {
     "processing": "처리",

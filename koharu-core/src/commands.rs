@@ -70,6 +70,7 @@ pub struct LlmGenerateParams {
 #[serde(rename_all = "camelCase")]
 pub struct ProcessRequest {
     pub document_id: Option<String>,
+    pub document_ids: Option<Vec<String>>,
     pub llm: Option<crate::PipelineLlmRequest>,
     pub language: Option<String>,
     pub system_prompt: Option<String>,

@@ -13,6 +13,10 @@
     "exportPsd": "导出 PSD...",
     "exportAllInpainted": "导出所有修复后的图像...",
     "exportAllRendered": "导出所有渲染后的图像...",
+    "exportSelectedInpainted": "导出选中的修复后图像...",
+    "exportSelectedRendered": "导出选中的渲染后图像...",
+    "processSelected": "处理选中的图片",
+    "deleteSelected": "删除选中的图片",
     "view": "视图",
     "fitWindow": "适应窗口",
     "originalSize": "原始大小",
@@ -57,7 +61,11 @@
     "pages_one": "{{count}} 页",
     "pages_other": "{{count}} 页",
     "empty": "没有文档",
-    "prompt": "选择或导入页面开始"
+    "prompt": "选择或导入页面开始",
+    "selected_one": "已选 {{count}} 项",
+    "selected_other": "已选 {{count}} 项",
+    "selectAll": "全选",
+    "deselectAll": "取消全选"
   },
   "panels": {
     "processing": "处理",

@@ -43,6 +43,9 @@ import { useEditorUiStore } from '@/lib/stores/editorUiStore'
 import { usePreferencesStore } from '@/lib/stores/preferencesStore'
 import type { PipelineJobRequest } from '@/lib/api/schemas'
 
+const getSelectedDocumentIds = () =>
+  Array.from(useEditorUiStore.getState().selectedDocumentIds)
+
 type MenuItem = {
   label: string
   onSelect?: () => void | Promise<void>
@@ -65,13 +68,21 @@ export function MenuBar() {
   const { send } = useProcessing()
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [settingsTab, setSettingsTab] = useState<TabId>('appearance')
+  const selectedDocumentIds = useEditorUiStore(
+    (state) => state.selectedDocumentIds,
+  )
+  const hasSelection = selectedDocumentIds.size > 0
 
-  const buildPipelineRequest = (documentId?: string): PipelineJobRequest => {
+  const buildPipelineRequest = (
+    documentId?: string,
+    documentIds?: string[],
+  ): PipelineJobRequest => {
     const { selectedTarget, selectedLanguage, renderEffect, renderStroke } =
       useEditorUiStore.getState()
     const { customSystemPrompt } = usePreferencesStore.getState()
     return {
       documentId,
+      documentIds,
       llm: selectedTarget ? { target: selectedTarget } : undefined,
       language: selectedLanguage,
       systemPrompt: customSystemPrompt,
@@ -142,6 +153,28 @@ export function MenuBar() {
       onSelect: () => send({ type: 'START_BATCH_EXPORT', layer: 'rendered' }),
       testId: 'menu-file-export-all-rendered',
     },
+    {
+      label: t('menu.exportSelectedInpainted'),
+      disabled: !hasSelection,
+      onSelect: () =>
+        send({
+          type: 'START_BATCH_EXPORT',
+          layer: 'inpainted',
+          documentIds: getSelectedDocumentIds(),
+        }),
+      testId: 'menu-file-export-selected-inpainted',
+    },
+    {
+      label: t('menu.exportSelectedRendered'),
+      disabled: !hasSelection,
+      onSelect: () =>
+        send({
+          type: 'START_BATCH_EXPORT',
+          layer: 'rendered',
+          documentIds: getSelectedDocumentIds(),
+        }),
+      testId: 'menu-file-export-selected-rendered',
+    },
   ]
 
   const menus: MenuSection[] = [
@@ -180,6 +213,29 @@ export function MenuBar() {
           onSelect: () =>
             send({ type: 'START_PIPELINE', request: buildPipelineRequest() }),
           testId: 'menu-process-all',
+        },
+        {
+          label: t('menu.processSelected'),
+          disabled: !hasSelection,
+          onSelect: () =>
+            send({
+              type: 'START_BATCH_PROCESS',
+              request: buildPipelineRequest(
+                undefined,
+                getSelectedDocumentIds(),
+              ),
+            }),
+          testId: 'menu-process-selected',
+        },
+        {
+          label: t('menu.deleteSelected'),
+          disabled: !hasSelection,
+          onSelect: () =>
+            send({
+              type: 'START_BATCH_DELETE',
+              documentIds: getSelectedDocumentIds(),
+            }),
+          testId: 'menu-process-delete-selected',
         },
       ],
     },

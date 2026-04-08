@@ -3,8 +3,9 @@
  * Do not edit manually.
  * OpenAPI spec version: 0.0.1
  */
-import type { ExportLayer } from './exportLayer'
+import type { ExportLayer } from './exportLayer';
 
 export interface ExportBatchRequest {
-  layer?: null | ExportLayer
+  documentIds?: string[] | null;
+  layer?: null | ExportLayer;
 }
