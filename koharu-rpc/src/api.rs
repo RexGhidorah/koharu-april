@@ -750,6 +750,7 @@ async fn render_document(
         text_block_index,
         request.shader_effect,
         request.shader_stroke,
+        None,
     )
     .await?;
 
@@ -1046,7 +1047,7 @@ async fn patch_text_block(
         .map_err(ApiError::from)?;
 
     if needs_render && let Some(idx) = block_index {
-        engine::render_document(&resources, &document_id, Some(idx), None, None)
+        engine::render_document(&resources, &document_id, Some(idx), None, None, None)
             .await
             .map_err(ApiError::internal)?;
     }
@@ -1209,6 +1210,7 @@ async fn start_pipeline(
             system_prompt: request.system_prompt,
             shader_effect: request.shader_effect,
             shader_stroke: request.shader_stroke,
+            document_font: request.document_font,
         },
         state.tracker.jobs(),
     )

@@ -76,6 +76,7 @@ pub struct ProcessRequest {
     pub system_prompt: Option<String>,
     pub shader_effect: Option<TextShaderEffect>,
     pub shader_stroke: Option<TextStrokeStyle>,
+    pub document_font: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
@@ -291,6 +292,7 @@ mod tests {
                 color: [255, 255, 255, 255],
                 width_px: Some(2.0),
             }),
+            document_font: Some("Comic Sans".to_string()),
         });
         round_trip(&ViewImageParams {
             document_id: "abc123".to_string(),

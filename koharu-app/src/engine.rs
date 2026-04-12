@@ -51,6 +51,7 @@ pub struct PipelineRunOptions {
     pub system_prompt: Option<String>,
     pub shader_effect: Option<TextShaderEffect>,
     pub shader_stroke: Option<TextStrokeStyle>,
+    pub document_font: Option<String>,
 }
 
 impl PipelineRunOptions {
@@ -60,6 +61,7 @@ impl PipelineRunOptions {
             system_prompt: req.system_prompt.clone(),
             shader_effect: req.shader_effect,
             shader_stroke: req.shader_stroke.clone(),
+            document_font: req.document_font.clone(),
         }
     }
 }
@@ -1118,6 +1120,7 @@ impl Engine for KoharuRenderEngine {
             None,
             options.shader_effect,
             options.shader_stroke.clone(),
+            options.document_font.as_deref(),
         )
         .await?;
         Ok(Patch::none())
@@ -1156,10 +1159,11 @@ pub async fn render_document(
     text_block_index: Option<usize>,
     shader_effect: Option<TextShaderEffect>,
     shader_stroke: Option<TextStrokeStyle>,
+    override_document_font: Option<&str>,
 ) -> Result<()> {
     let renderer = get_renderer(res).await?;
     let doc = res.storage.page(document_id).await?;
-    let document_font = doc.style.as_ref().and_then(|s| s.default_font.as_deref());
+    let document_font = override_document_font.or(doc.style.as_ref().and_then(|s| s.default_font.as_deref()));
     let source = res.storage.images.load(&doc.source)?;
     let inpainted = doc
         .inpainted
@@ -1581,6 +1585,24 @@ mod tests {
                 color: [0, 0, 0, 255],
                 width_px: Some(3.0),
             }),
+        };
+
+        let req = ProcessRequest {
+            document_id: None,
+            document_ids: None,
+            llm: None,
+            language: Some("es-ES".to_string()),
+            system_prompt: Some("Translate tersely".to_string()),
+            shader_effect: Some(TextShaderEffect {
+                italic: true,
+                bold: false,
+            }),
+            shader_stroke: Some(TextStrokeStyle {
+                enabled: false,
+                color: [0, 0, 0, 255],
+                width_px: Some(3.0),
+            }),
+            document_font: Some("Comic Sans".to_string()),
         };
 
         let options = PipelineRunOptions::from_process_request(&req);

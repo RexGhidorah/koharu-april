@@ -376,7 +376,7 @@ impl KoharuMcp {
             .transpose()
             .map_err(|e: anyhow::Error| e.to_string())?;
 
-        engine::render_document(&res, &p.document_id, p.text_block_index, effect, None)
+        engine::render_document(&res, &p.document_id, p.text_block_index, effect, None, None)
             .await
             .map_err(|e| e.to_string())?;
 
@@ -476,6 +476,7 @@ impl KoharuMcp {
                 system_prompt: p.system_prompt,
                 shader_effect: effect,
                 shader_stroke: None,
+                document_font: None,
             },
             jobs,
         )

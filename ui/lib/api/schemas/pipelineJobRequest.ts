@@ -9,6 +9,8 @@ import type { TextStrokeStyle } from './textStrokeStyle';
 
 export interface PipelineJobRequest {
   /** @nullable */
+  documentFont?: string | null;
+  /** @nullable */
   documentId?: string | null;
   /** @nullable */
   documentIds?: string[] | null;
