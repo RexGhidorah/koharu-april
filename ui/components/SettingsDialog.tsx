@@ -142,7 +142,7 @@ export function SettingsDialog({
         setAppConfig(config)
         setProviderCatalogs(catalog.providers)
         setEngineCatalog(engines)
-      } catch { }
+      } catch {}
     })()
   }, [open])
 
@@ -263,13 +263,13 @@ export function SettingsDialog({
   const storageSettingsUnchanged =
     dataPathDraft.trim() === appConfig?.data?.path &&
     httpConnectTimeoutDraft.trim() ===
-    String(
-      appConfig?.http?.connect_timeout ?? DEFAULT_HTTP_CONNECT_TIMEOUT,
-    ) &&
+      String(
+        appConfig?.http?.connect_timeout ?? DEFAULT_HTTP_CONNECT_TIMEOUT,
+      ) &&
     httpReadTimeoutDraft.trim() ===
-    String(appConfig?.http?.read_timeout ?? DEFAULT_HTTP_READ_TIMEOUT) &&
+      String(appConfig?.http?.read_timeout ?? DEFAULT_HTTP_READ_TIMEOUT) &&
     httpMaxRetriesDraft.trim() ===
-    String(appConfig?.http?.max_retries ?? DEFAULT_HTTP_MAX_RETRIES)
+      String(appConfig?.http?.max_retries ?? DEFAULT_HTTP_MAX_RETRIES)
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

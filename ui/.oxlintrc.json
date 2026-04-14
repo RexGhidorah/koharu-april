@@ -1,10 +1,5 @@
 {
-  "plugins": [
-    "react",
-    "unicorn",
-    "typescript",
-    "oxc"
-  ],
+  "plugins": ["react", "unicorn", "typescript", "oxc"],
   "categories": {},
   "rules": {
     "no-constant-condition": "warn",
@@ -134,11 +129,5 @@
     "builtin": true
   },
   "globals": {},
-  "ignorePatterns": [
-    ".next/",
-    "out/",
-    "dist/",
-    "build/",
-    "coverage/"
-  ]
+  "ignorePatterns": [".next/", "out/", "dist/", "build/", "coverage/"]
 }
