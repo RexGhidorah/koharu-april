@@ -1119,7 +1119,11 @@ pub async fn render_document(
 ) -> Result<()> {
     let renderer = get_renderer(res).await?;
     let doc = res.storage.page(document_id).await?;
-    let document_font = doc.style.as_ref().and_then(|s| s.default_font.as_deref()).or(fallback_font.as_deref());
+    let document_font = doc
+        .style
+        .as_ref()
+        .and_then(|s| s.default_font.as_deref())
+        .or(fallback_font.as_deref());
     let source = res.storage.images.load(&doc.source)?;
     let inpainted = doc
         .inpainted
@@ -1540,6 +1544,7 @@ mod tests {
                 color: [0, 0, 0, 255],
                 width_px: Some(3.0),
             }),
+            default_font: None,
         };
 
         let options = PipelineRunOptions::from_process_request(&req);

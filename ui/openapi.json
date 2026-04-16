@@ -77,7 +77,7 @@
                         }
                       ],
                       "default": {
-                        "path": "/home/jules/.local/share/Koharu"
+                        "path": "C:\\Users\\Mayo\\AppData\\Local\\Koharu"
                       }
                     },
                     "http": {
@@ -149,7 +149,7 @@
                       }
                     ],
                     "default": {
-                      "path": "/home/jules/.local/share/Koharu"
+                      "path": "C:\\Users\\Mayo\\AppData\\Local\\Koharu"
                     }
                   },
                   "http": {
@@ -209,7 +209,7 @@
                         }
                       ],
                       "default": {
-                        "path": "/home/jules/.local/share/Koharu"
+                        "path": "C:\\Users\\Mayo\\AppData\\Local\\Koharu"
                       }
                     },
                     "http": {
