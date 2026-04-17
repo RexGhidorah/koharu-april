@@ -35,3 +35,4 @@ mod tests {
         assert_eq!(parse_hex_color("ffffff").unwrap(), [255, 255, 255, 255]);
     }
 }
+pub mod epub;

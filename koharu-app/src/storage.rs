@@ -276,7 +276,29 @@ impl Storage {
     ) -> Result<Vec<Document>> {
         use rayon::iter::{IntoParallelIterator, ParallelIterator};
 
-        let pages: Vec<Document> = files
+        let mut processed_files = Vec::new();
+        for file in files {
+            if file.name.to_lowercase().ends_with(".epub") {
+                // If it's an EPUB file, extract its images
+                match koharu_core::parse::epub::extract_epub_images(&file.data) {
+                    Ok(images) => {
+                        tracing::info!(
+                            "Extracted {} images from EPUB: {}",
+                            images.len(),
+                            file.name
+                        );
+                        processed_files.extend(images);
+                    }
+                    Err(e) => {
+                        tracing::error!("Failed to parse EPUB {}: {}", file.name, e);
+                    }
+                }
+            } else {
+                processed_files.push(file);
+            }
+        }
+
+        let pages: Vec<Document> = processed_files
             .into_par_iter()
             .filter_map(|file| {
                 let reader = image::ImageReader::new(std::io::Cursor::new(&file.data))

@@ -15,6 +15,10 @@ publish.workspace = true
 anyhow = { workspace = true }
 blake3 = { workspace = true }
 image = { workspace = true }
+natord.workspace = true
+percent-encoding = "2.3.2"
+regex = "1.12.3"
+roxmltree = "0.21.1"
 schemars = { workspace = true }
 serde = { workspace = true }
 serde_bytes = { workspace = true }
@@ -22,6 +26,7 @@ strum = { workspace = true }
 tokio = { workspace = true }
 utoipa = { workspace = true }
 uuid = { workspace = true }
+zip = { workspace = true, features = ["deflate"] }
 
 [dev-dependencies]
 serde_json = { workspace = true }
