@@ -377,24 +377,38 @@ async fn export_cbz(
             // We use Rendered first. If Rendered is not populated (page not processed),
             // fallback to Inpainted, and finally to Source.
             // This ensures every page is exported.
-            let bytes = if let Some(b) = crate::psd_export::png_bytes_for_page(&session_c, *id, ImageRole::Rendered)? {
+            let bytes = if let Some(b) =
+                crate::psd_export::png_bytes_for_page(&session_c, *id, ImageRole::Rendered)?
+            {
                 b
-            } else if let Some(b) = crate::psd_export::png_bytes_for_page(&session_c, *id, ImageRole::Inpainted)? {
+            } else if let Some(b) =
+                crate::psd_export::png_bytes_for_page(&session_c, *id, ImageRole::Inpainted)?
+            {
                 b
-            } else if let Some(b) = crate::psd_export::png_bytes_for_page(&session_c, *id, ImageRole::Source)? {
+            } else if let Some(b) =
+                crate::psd_export::png_bytes_for_page(&session_c, *id, ImageRole::Source)?
+            {
                 b
             } else {
                 continue;
             };
 
-            let is_cover = metadata_c.as_ref().map_or(false, |m| m.cover_page == Some(*id));
+            let is_cover = metadata_c
+                .as_ref()
+                .map_or(false, |m| m.cover_page == Some(*id));
             let filename = if is_cover {
                 "00_cover.png".to_string()
             } else {
                 // Sanitize chapter name for folder
                 let safe_chapter: String = current_chapter
                     .chars()
-                    .map(|c| if c.is_ascii_alphanumeric() || c == ' ' { c } else { '_' })
+                    .map(|c| {
+                        if c.is_ascii_alphanumeric() || c == ' ' {
+                            c
+                        } else {
+                            '_'
+                        }
+                    })
                     .collect();
                 format!("{}/{:03}.png", safe_chapter, page_counter)
             };
